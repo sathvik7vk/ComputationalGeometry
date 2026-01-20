@@ -1,0 +1,11 @@
+# Build folders
+out/
+build/
+Debug/
+Release/
+CMakeFiles/
+
+# Visual Studio files
+.vs/
+*.vcxproj*
+*.sln
