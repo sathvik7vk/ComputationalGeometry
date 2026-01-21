@@ -48,16 +48,18 @@ namespace cg::core
 		//constexpr : Allows compile-time evaluation when possible
 
 
-		Vec<T, N>& operator+(const Vec<T, N>& other)
+		Vec<T, N> operator+(const Vec<T, N>& other) const
 		{
-			if (this->m_vec.size() != other.m_vec.size())
-				throw std::runtime_error("Size of vector do not match");
+			//Size check is unnecessary. This will always be true at compile time.
+			// if (this->m_vec.size() != other.m_vec.size())
+			// 	throw std::runtime_error("Size of vector do not match");
 
+			Vec<T, N> result;
 			for (int i = 0; i < this->m_vec.size(); ++i)
 			{
-				this->m_vec[i] = this->m_vec[i] + other.m_vec[i];
+				result.m_vec[i] = this->m_vec[i] + other.m_vec[i];
 			}
-			return *this;
+			return result;
 		}
 	};
 
