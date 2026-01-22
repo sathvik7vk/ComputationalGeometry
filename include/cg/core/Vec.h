@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-
 //Namespaces prevent name collisions in large projects.
 namespace cg::core
 {
@@ -47,7 +46,7 @@ namespace cg::core
 
 		//constexpr : Allows compile-time evaluation when possible
 
-
+		//Addition operator overloading
 		Vec<T, N> operator+(const Vec<T, N>& other) const
 		{
 			//Size check is unnecessary. This will always be true at compile time.
@@ -60,6 +59,16 @@ namespace cg::core
 				result.m_vec[i] = this->m_vec[i] + other.m_vec[i];
 			}
 			return result;
+		}
+
+		//Compound addition
+		Vec<T,N>& operator+=(const Vec<T,N>& other) 
+		{
+			for (int i = 0; i < this->m_vec.size(); ++i)
+			{
+				this->m_vec[i] +=  other.m_vec[i];
+			}
+			return *this;
 		}
 	};
 
