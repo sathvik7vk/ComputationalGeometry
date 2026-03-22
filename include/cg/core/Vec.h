@@ -44,14 +44,14 @@ namespace cg::core
 		//constexpr : Allows compile-time evaluation when possible
 
 		//Addition operator overloading
-		Vec<T, N> operator+(const Vec<T, N>& other) const
+		constexpr Vec<T, N> operator+(const Vec<T, N>& other) const
 		{
 			//Size check is unnecessary. This will always be true at compile time.
 			// if (this->m_vec.size() != other.m_vec.size())
 			// 	throw std::runtime_error("Size of vector do not match");
 
 			Vec<T, N> result;
-			for (int i = 0; i < this->m_vec.size(); ++i)
+			for (size_t i = 0; i < this->m_vec.size(); ++i)
 			{
 				result.m_vec[i] = this->m_vec[i] + other.m_vec[i];
 			}
@@ -59,15 +59,16 @@ namespace cg::core
 		}
 
 		//Compound addition
-		Vec<T,N>& operator+=(const Vec<T,N>& other) 
+		constexpr Vec<T,N>& operator+=(const Vec<T,N>& other) 
 		{
-			for (int i = 0; i < this->m_vec.size(); ++i)
+			for (size_t i = 0; i < this->m_vec.size(); ++i)
 			{
 				this->m_vec[i] +=  other.m_vec[i];
 			}
 			return *this;
 		}
 
+		//Print vector elements
 		void PrintVec() const
 		{
 			for (const auto& elem : m_vec)
@@ -76,7 +77,33 @@ namespace cg::core
 			}
 			std::cout << std::endl;
 		}
+
+		T magnitude() const
+		{
+			T sum = T{0};
+
+			for(const auto& elem:m_vec)
+			{
+				sum += elem*elem;
+			}
+			return sqrt(sum);
+		}
+
+		
 	};
+
+	template <typename T, size_t N>
+	static T dotProduct(const Vec<T, N> &a, const Vec<T, N> &b)
+	{
+		T result = T{0};
+		for (size_t i = 0; i < N; ++i)
+		{
+			result += a[i] * b[i];
+		}
+		return result;
+	}
+
+
 
 	using Vec2D = Vec<double, 2>;
 	using Vec3D = Vec<double, 3>;

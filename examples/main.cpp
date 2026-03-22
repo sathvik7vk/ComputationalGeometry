@@ -15,6 +15,10 @@ int main()
 	c+=b; // compound addition
 	c.PrintVec();
 
+	c = c+b;
+	c.PrintVec();
+	
+
 	return 0;
 }
 
