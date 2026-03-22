@@ -10,10 +10,10 @@ int main()
 	cg::core::Vec3D c = a+b;	//addition
 	
 
-	std::cout << c[0] << ", " << c[1] << ", " << c[2] << std::endl;
+	c.PrintVec();
 
 	c+=b; // compound addition
-	std::cout << c[0] << ", " << c[1] << ", " << c[2] << std::endl;
+	c.PrintVec();
 
 	return 0;
 }

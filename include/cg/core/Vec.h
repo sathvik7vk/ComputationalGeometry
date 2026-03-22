@@ -28,10 +28,7 @@ namespace cg::core
 		}
 
 		constexpr T& operator[](size_t i) { 
-			if(i >= m_vec.size())
-				throw std::runtime_error("Out of range");
-			return m_vec[i]; 
-				
+			return m_vec[i];				
 		}
 
 		constexpr const T& operator[](size_t i)  const { return m_vec[i]; }
@@ -69,6 +66,15 @@ namespace cg::core
 				this->m_vec[i] +=  other.m_vec[i];
 			}
 			return *this;
+		}
+
+		void PrintVec() const
+		{
+			for (const auto& elem : m_vec)
+			{
+				std::cout << elem << " ";
+			}
+			std::cout << std::endl;
 		}
 	};
 
