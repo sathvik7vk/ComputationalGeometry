@@ -17,6 +17,17 @@ int main()
 
 	c = c+b;
 	c.PrintVec();
+
+	double magnitude = c.Magnitude();
+
+	std::cout<<"Magnitude = "<<magnitude<<std::endl;
+
+	c.Normalise();
+	c.PrintVec();
+
+	double mag = c.Magnitude();
+
+	std::cout<<"Magnitude = "<<mag<<std::endl;
 	
 
 	return 0;

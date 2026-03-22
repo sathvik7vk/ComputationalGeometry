@@ -78,15 +78,33 @@ namespace cg::core
 			std::cout << std::endl;
 		}
 
-		T magnitude() const
-		{
-			T sum = T{0};
+
+
+		T NormSquared() const
+		{	
+			T normSquared = T{0};
 
 			for(const auto& elem:m_vec)
 			{
-				sum += elem*elem;
+				normSquared += elem*elem;
 			}
-			return sqrt(sum);
+			return normSquared;
+
+		}
+
+		T Magnitude() const
+		{
+			return sqrt(NormSquared());
+		}
+
+		Vec<T, N>& Normalise()
+		{
+			T magnitude = Magnitude();
+			for(size_t i=0; i<m_vec.size(); ++i)
+			{
+				m_vec[i] = m_vec[i]/magnitude;
+			}
+			return *this;
 		}
 
 		
