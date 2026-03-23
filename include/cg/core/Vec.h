@@ -10,6 +10,11 @@
 //Namespaces prevent name collisions in large projects.
 namespace cg::core
 {
+	template<typename T>
+	//constexpr T eps = static_cast<T>(1e-12); 
+	constexpr T eps = std::numeric_limits<T>::epsilon();
+
+
 	template<typename T, size_t N>
 	class Vec
 	{
@@ -100,11 +105,75 @@ namespace cg::core
 		Vec<T, N>& Normalise()
 		{
 			T magnitude = Magnitude();
-			for(size_t i=0; i<m_vec.size(); ++i)
-			{
-				m_vec[i] = m_vec[i]/magnitude;
-			}
+			if(magnitude < eps<T> )
+				throw std::runtime_error("Can not normalise zero vector");
+			
+			// for(size_t i=0; i<m_vec.size(); ++i)
+			// {
+			// 	m_vec[i] = m_vec[i]/magnitude;
+			// }
+
+			T invMagnitude = T{1}/magnitude;
+			for(auto& elem:m_vec)
+				elem = elem*invMagnitude;
+
 			return *this;
+		}
+
+		constexpr Vec<T,N> operator-(const Vec<T,N>& other) const
+		{
+			Vec<T,N> result;
+			//assert(this->m_vec.size() == other.m_vec.size());
+			for(size_t i=0; i<m_vec.size(); ++i)
+				result[i] = m_vec[i]-other.m_vec[i];
+			return result;
+
+			//Below implementation is simple and avoids code duplication.
+			//Vec<T,N> result(*this);
+    		//result -= other;
+    		//return result;
+		}
+
+		Vec<T,N>& operator-=(const Vec<T,N>& other)
+		{
+			for(size_t i=0; i<m_vec.size(); ++i)
+				m_vec[i] = m_vec[i]-other.m_vec[i];
+			return *this;
+		}
+
+		constexpr Vec<T,N> operator*(const T value) const
+		{
+			Vec<T,N> result;
+			for(size_t i=0; i<m_vec.size(); ++i)
+				result[i] = m_vec[i]*value;
+			return result;	
+		}
+
+		Vec<T,N>& operator*=(const T value)
+		{
+			for(size_t i=0; i<m_vec.size(); ++i)
+				m_vec[i] = m_vec[i]*value;
+			return *this;	
+		}
+
+		constexpr Vec<T,N> operator/(const T value) const
+		{
+			Vec<T, N> result;
+			if (std::abs(value) <= eps<T>)
+				throw std::runtime_error("Division by zero scalar");
+
+			for (size_t i = 0; i < m_vec.size(); ++i)
+				result[i] = m_vec[i] / value;
+			return result;
+		}
+
+		Vec<T,N>& operator/=(const T value)
+		{
+			if (std::abs(value) <= eps<T>)
+				throw std::runtime_error("Division by zero scalar");
+			for(size_t i=0; i<m_vec.size(); ++i)
+				m_vec[i] = m_vec[i]/value;
+			return *this;	
 		}
 
 		
