@@ -28,7 +28,18 @@ int main()
 	double mag = c.Magnitude();
 
 	std::cout<<"Magnitude = "<<mag<<std::endl;
+
+	cg::core::Vec2D vec2d1 = {2,3};
+	cg::core::Vec2D vec2d2 = {4,5};
+
+	double res = crossProd2D(vec2d1, vec2d2);
+	std::cout<<"Cross prod 2d res = " << res <<std::endl;
+
 	
+	cg::core::Vec3D res3d = crossProd3D(a, b);
+	std::cout<<"Cross prod 3d res = "<<std::endl;
+	res3d.PrintVec();
+
 
 	return 0;
 }

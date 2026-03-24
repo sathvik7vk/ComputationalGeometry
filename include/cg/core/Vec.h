@@ -190,6 +190,23 @@ namespace cg::core
 		return result;
 	}
 
+	template<typename T>
+	static T crossProd2D(const Vec<T,2>& vec1, const Vec<T,2>& vec2)
+	{
+		T result = vec1[0]*vec2[1] - vec2[0]*vec1[1];
+		return result;
+	}
+
+	template<typename T>
+	static Vec<T,3> crossProd3D(const Vec<T,3>& vec1, const Vec<T,3>& vec2)
+	{
+		Vec<T,3> result;
+		result[0] = vec1[1]*vec2[2] - vec2[1] * vec1[2];
+		result[1] = vec2[0]*vec1[2] - vec1[0] * vec2[2];
+		result[2] = vec1[0]*vec2[1] - vec1[1] * vec2[0];
+
+		return result;
+	}
 
 
 	using Vec2D = Vec<double, 2>;
