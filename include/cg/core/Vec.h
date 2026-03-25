@@ -208,6 +208,35 @@ namespace cg::core
 		return result;
 	}
 
+	/*
+	Alignment:
+	Alignment describes how closely two vectors "agree" on a path. It’s about parallelism.
+	The Vibe: Are they pointing the same way?
+	The Measure: This is what the Dot Product tracks.
+	Example: If you are pushing a box, your force is "aligned" with the box's movement if you’re pushing it straight ahead.
+
+	Orientation:
+	Orientation describes how an object is positioned or rotated in space relative to a fixed frame. It’s about tilt and facing.
+	The Vibe: Which way is "up" or "forward" for this specific object?
+	The Measure: This is often defined using the Cross Product to find a "normal" vector (a line sticking straight out of a surface).
+	Example: A smartphone knows its "orientation" (portrait vs. landscape) by sensing which way gravity is pulling relative to its screen.
+	*/
+
+	/*
+	If 
+	result > 0 => a, b, c are in counter-clockwise direction
+	result < 0 => a, b, c are in clockwise direction
+	result == 0 => a,b,c are collinear
+	*/
+	template<typename T>
+	constexpr static int orient(const Vec<T,2>& a, const Vec<T,2>& b, const Vec<T,2>& c)
+	{
+		T result = crossProd2D(b-a, c-a);
+		if(result > eps<T>) return 1;
+		if(result < eps<T>) return -1;
+		return 0;
+	}
+
 
 	using Vec2D = Vec<double, 2>;
 	using Vec3D = Vec<double, 3>;
