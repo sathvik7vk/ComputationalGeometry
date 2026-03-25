@@ -237,6 +237,21 @@ namespace cg::core
 		return 0;
 	}
 
+	template<typename T>
+	constexpr bool isCollinear(const Vec<T,2>& a, const Vec<T,2>& b, const Vec<T,2>& c)
+	{
+		return orient(a,b,c) == 0;
+	}
+
+	template<typename T>
+	constexpr bool intersectSegments(const Vec<T,2>& p1, const Vec<T,2>& p2, const Vec<T,2>& p3, const Vec<T,2>& p4)
+	{
+		if(orient(p1,p2,p3) * orient(p1,p2,p4) < 0 && orient(p3,p4,p1) * orient(p3,p4,p2) < 0)
+			return true;
+
+		return false;
+	}
+
 
 	using Vec2D = Vec<double, 2>;
 	using Vec3D = Vec<double, 3>;
