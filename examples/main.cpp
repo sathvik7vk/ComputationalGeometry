@@ -40,6 +40,12 @@ int main()
 	std::cout<<"Cross prod 3d res = "<<std::endl;
 	res3d.PrintVec();
 
+	bool rc = a==b;
+
+	bool sc = a!=b;
+
+	//bool kc = vec2d1 == b;
+
 
 	return 0;
 }

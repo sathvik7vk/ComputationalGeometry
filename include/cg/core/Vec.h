@@ -176,7 +176,24 @@ namespace cg::core
 			return *this;	
 		}
 
-		
+		constexpr bool operator==(const Vec<T,N>& other) const
+		{
+			for(size_t i =0; i<m_vec.size(); ++i)
+			{
+			// 	if((m_vec[i] - other.m_vec[i])>eps<T>)	//doesnot compare for negetive values, Use abs(difference)
+			// 	return false;
+
+			T diff = m_vec[i] - other.m_vec[i];
+			if (diff * diff > eps<T> * eps<T>)	//use squared comparison. it is faster and advanced.
+				return false;
+			}
+			return true;
+		}
+
+		constexpr bool operator!=(const Vec<T,N>& other) const
+		{
+			return !(*this == other);
+		}
 	};
 
 	template <typename T, size_t N>
