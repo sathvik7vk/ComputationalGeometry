@@ -14,6 +14,8 @@ namespace cg::core
 	//constexpr T eps = static_cast<T>(1e-12); 
 	constexpr T eps = std::numeric_limits<T>::epsilon();
 
+	enum POSITION {LEFT, RIGHT, BEHIND, BEYOND, ORIGIN, DESTINATION, MIDDLE};
+
 
 	template<typename T, size_t N>
 	class Vec
@@ -250,7 +252,7 @@ namespace cg::core
 	{
 		T result = crossProd2D(b-a, c-a);
 		if(result > eps<T>) return 1;
-		if(result < eps<T>) return -1;
+		if(result < -eps<T>) return -1;
 		return 0;
 	}
 
@@ -267,6 +269,34 @@ namespace cg::core
 			return true;
 
 		return false;
+	}
+
+	template <typename T>
+	constexpr POSITION orientationPosition(const Vec<T,2>& a, const Vec<T,2>& b, const Vec<T,2>& c)
+	{
+		int res = orient(a,b,c);
+		if(res > 0)
+		return LEFT;
+		if(res < 0)
+		return RIGHT;
+
+		if(res == 0)
+		{
+			if(a == c)
+				return ORIGIN;
+			if(b == c)
+				return DESTINATION;
+
+			const Vec<T,2> ab = b-a;
+			const Vec<T,2> ac = c-a;
+			T dotRes = dotProduct(ab,ac);
+
+			if(dotRes>ab.NormSquared())
+				return BEYOND;
+			if(dotRes < 0)
+				return BEHIND;
+			return MIDDLE;
+		}
 	}
 
 

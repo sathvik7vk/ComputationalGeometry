@@ -31,6 +31,7 @@ int main()
 
 	cg::core::Vec2D vec2d1 = {2,3};
 	cg::core::Vec2D vec2d2 = {4,5};
+	cg::core::Vec2D vec2d3 = {7,-1};
 
 	double res = crossProd2D(vec2d1, vec2d2);
 	std::cout<<"Cross prod 2d res = " << res <<std::endl;
@@ -43,6 +44,8 @@ int main()
 	bool rc = a==b;
 
 	bool sc = a!=b;
+
+	cg::core::POSITION pos = orientationPosotion(vec2d1, vec2d2, vec2d3);
 
 	//bool kc = vec2d1 == b;
 
