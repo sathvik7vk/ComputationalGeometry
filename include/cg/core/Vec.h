@@ -6,6 +6,7 @@
 #include <cassert>
 #include <algorithm>
 #include <stdexcept>
+#include <vector>
 
 //Namespaces prevent name collisions in large projects.
 namespace cg::core
@@ -323,6 +324,18 @@ namespace cg::core
 	{
 		POSITION pos = orientationPosition(a,b,c);
 		return pos == ORIGIN || pos == DESTINATION || pos == MIDDLE;
+	}
+
+	template<typename T>
+	constexpr T AreaOfPolygon(const std::vector<Vec<T,2>>& iListOf2DVectors)
+	{
+		T totalSum = T{0};
+		for(int i=0; i<iListOf2DVectors.size(); ++i)
+		{
+			T sum = crossProd2D(iListOf2DVectors[i], iListOf2DVectors[(i+1)%iListOf2DVectors.size()]);
+			totalSum += sum;
+		}
+		return totalSum * T{0.5};
 	}
 
 
