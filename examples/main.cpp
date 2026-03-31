@@ -45,7 +45,7 @@ int main()
 
 	bool sc = a!=b;
 
-	cg::core::POSITION pos = orientationPosotion(vec2d1, vec2d2, vec2d3);
+	cg::core::POSITION pos = orientationPosition(vec2d1, vec2d2, vec2d3);
 
 	//bool kc = vec2d1 == b;
 

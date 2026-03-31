@@ -262,10 +262,29 @@ namespace cg::core
 		return orient(a,b,c) == 0;
 	}
 
-	template<typename T>
-	constexpr bool intersectSegments(const Vec<T,2>& p1, const Vec<T,2>& p2, const Vec<T,2>& p3, const Vec<T,2>& p4)
+	template <typename T>
+	constexpr bool intersectSegments(const Vec<T, 2> &p1,
+									 const Vec<T, 2> &p2,
+									 const Vec<T, 2> &p3,
+									 const Vec<T, 2> &p4)
 	{
-		if(orient(p1,p2,p3) * orient(p1,p2,p4) < 0 && orient(p3,p4,p1) * orient(p3,p4,p2) < 0)
+		int o1 = orient(p1, p2, p3);
+		int o2 = orient(p1, p2, p4);
+		int o3 = orient(p3, p4, p1);
+		int o4 = orient(p3, p4, p2);
+
+		// Proper intersection
+		if (o1 * o2 < 0 && o3 * o4 < 0)
+			return true;
+
+		// Collinear / endpoint cases
+		if (o1 == 0 && onSegment(p1, p2, p3))
+			return true;
+		if (o2 == 0 && onSegment(p1, p2, p4))
+			return true;
+		if (o3 == 0 && onSegment(p3, p4, p1))
+			return true;
+		if (o4 == 0 && onSegment(p3, p4, p2))
 			return true;
 
 		return false;
@@ -294,10 +313,19 @@ namespace cg::core
 			if(dotRes>ab.NormSquared())
 				return BEYOND;
 			if(dotRes < 0)
-				return BEHIND;
-			return MIDDLE;
+				return BEHIND;	
 		}
+		return MIDDLE;
 	}
+
+	template <typename T>
+	constexpr bool isOnSegment(const Vec<T,2>& a, const Vec<T,2>& b, const Vec<T,2>& c)
+	{
+		POSITION pos = orientationPosition(a,b,c);
+		return pos == ORIGIN || pos == DESTINATION || pos == MIDDLE;
+	}
+
+
 
 
 	using Vec2D = Vec<double, 2>;
