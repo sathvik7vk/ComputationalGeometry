@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+#include <limits>
 
 //Namespaces prevent name collisions in large projects.
 namespace cg::core
@@ -279,13 +280,13 @@ namespace cg::core
 			return true;
 
 		// Collinear / endpoint cases
-		if (o1 == 0 && onSegment(p1, p2, p3))
+		if (o1 == 0 && isOnSegment(p1, p2, p3))
 			return true;
-		if (o2 == 0 && onSegment(p1, p2, p4))
+		if (o2 == 0 && isOnSegment(p1, p2, p4))
 			return true;
-		if (o3 == 0 && onSegment(p3, p4, p1))
+		if (o3 == 0 && isOnSegment(p3, p4, p1))
 			return true;
-		if (o4 == 0 && onSegment(p3, p4, p2))
+		if (o4 == 0 && isOnSegment(p3, p4, p2))
 			return true;
 
 		return false;
@@ -338,8 +339,25 @@ namespace cg::core
 		return totalSum * T{0.5};
 	}
 
-	
+	template<typename T>
+	constexpr T distancePointPoint(const Vec<T,2>& a, const Vec<T,2>& b)
+	{
+		return (b-a).Magnitude();
+	}
 
+	template<typename T>
+	constexpr T distancePointInfiniteSegment(const Vec<T,2>& p, const Vec<T,2>& a, const Vec<T,2>& b)
+	{
+		Vec<T,2> ab = b-a;
+		Vec<T,2> ap = p-a;
+
+		T areaOfParallelogram = crossProd2D(ab, ap);
+		//Area of parallelogram = base * height
+		//Base = ab
+		//Height =  distance from point p to line ab
+
+		return std::abs(areaOfParallelogram)/ab.Magnitude();
+	}
 
 
 
