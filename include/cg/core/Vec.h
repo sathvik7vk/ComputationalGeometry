@@ -327,7 +327,7 @@ namespace cg::core
 	}
 
 	template<typename T>
-	constexpr T AreaOfPolygon(const std::vector<Vec<T,2>>& iListOf2DVectors)
+	T AreaOfPolygon(const std::vector<Vec<T,2>>& iListOf2DVectors)
 	{
 		T totalSum = T{0};
 		for(int i=0; i<iListOf2DVectors.size(); ++i)
@@ -337,6 +337,8 @@ namespace cg::core
 		}
 		return totalSum * T{0.5};
 	}
+
+	
 
 
 
