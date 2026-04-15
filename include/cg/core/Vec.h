@@ -378,11 +378,16 @@ namespace cg::core
 	{
 		Vec<T,2> ab = b-a;
 		Vec<T,2> ap = p-a;
-
+		//res is the scalar projection of ap onto ab, scaled by |ab|.
 		T res = dotProduct(ab, ap);
 		if(res <=0)
 			return ap.Megnitude();
 		else if(res >= ab.NormSquared())
+		//imagine point P is on the point B
+		//ap.ab would result in ab2.
+		
+
+		//Not checking distance — checking position along AB.
 			return (p-b).Magnitude();
 		else
 			return distancePointInfiniteSegment(p, a, b);
