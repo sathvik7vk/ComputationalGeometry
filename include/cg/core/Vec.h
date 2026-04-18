@@ -16,7 +16,7 @@ namespace cg::core
 	// constexpr T eps = static_cast<T>(1e-12);
 	constexpr T eps = std::numeric_limits<T>::epsilon();
 
-	enum POSITION
+	enum class POSITION
 	{
 		LEFT,
 		RIGHT,
@@ -311,34 +311,34 @@ namespace cg::core
 	{
 		int res = orient(a, b, c);
 		if (res > 0)
-			return LEFT;
+			return POSITION::LEFT;
 		if (res < 0)
-			return RIGHT;
+			return POSITION::RIGHT;
 
 		if (res == 0)
 		{
 			if (a == c)
-				return ORIGIN;
+				return POSITION::ORIGIN;
 			if (b == c)
-				return DESTINATION;
+				return POSITION::DESTINATION;
 
 			const Vec<T, 2> ab = b - a;
 			const Vec<T, 2> ac = c - a;
 			T dotRes = dotProduct(ab, ac);
 
 			if (dotRes > ab.NormSquared())
-				return BEYOND;
+				return POSITION::BEYOND;
 			if (dotRes < 0)
-				return BEHIND;
+				return POSITION::BEHIND;
 		}
-		return MIDDLE;
+		return POSITION::MIDDLE;
 	}
 
 	template <typename T>
 	constexpr bool isOnSegment(const Vec<T, 2> &a, const Vec<T, 2> &b, const Vec<T, 2> &c)
 	{
 		POSITION pos = orientationPosition(a, b, c);
-		return pos == ORIGIN || pos == DESTINATION || pos == MIDDLE;
+		return pos == POSITION::ORIGIN || pos == POSITION::DESTINATION || pos == POSITION::MIDDLE;
 	}
 
 	template <typename T>
@@ -402,4 +402,28 @@ namespace cg::core
 	using Vec2I = Vec<int, 2>;
 	using Vec3I = Vec<int, 3>;
 
+	template<typename T>
+	struct Line2
+	{
+		Vec<T, 2> point;
+		Vec<T, 2> direction;
+
+	};
+
+	enum class LineIntersectiontype
+	{
+		Intersecting,
+		Parallel,
+		Coincident
+	};
+
+	template<typename T>
+	void IntersectLines(const Line2<T>& line1, const Line2<T>& line2 )
+	{
+		
+
+	}
+
 }
+
+
