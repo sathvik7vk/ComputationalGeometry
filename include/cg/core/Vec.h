@@ -566,10 +566,60 @@ namespace cg::core
 		}
 		else
 		{
-			T u = crossProd2D((pt1 - line1Pt ), line1Dir) / crossProd2D(line1Dir, segmentVec);
+			T u = crossProd2D((line1Pt -pt1), line1Dir) / crossProd2D(segmentVec, line1Dir );
 			if (u >= T(0) && u <= T(1))
 			{
 				result.point = pt1 + (u * segmentVec);
+				result.type = LineIntersectiontype::Intersecting;
+			}
+			else
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::NotIntersecting;
+			}
+		}
+
+		return result;
+	}
+
+
+	template<typename T>
+	IntersectionLinesResult<T> IntersectLineSegmentAndLineSegment(const Vec<T,2>& Line1Pt1, const Vec<T,2>& Line1Pt2, const Vec<T,2>& Line2Pt1,  const Vec<T,2>& Line2Pt2  )
+	{
+		IntersectionLinesResult<T> result;
+
+		//Get the data from lines
+		Vec<T,2> segmentVec1 = Line1Pt2 - Line1Pt1;
+		Vec<T,2> segmentVec2 = Line2Pt2 - Line2Pt1;
+
+		//L1(t) = Line1Pt1 + t * segmentVec1;
+		//L2(u) = Line2Pt1 + u * segmentVec2;
+
+		//get the cross product between 
+		if(std::abs(crossProd2D(segmentVec1, segmentVec2))<eps<T>)
+		{
+			if(abs(crossProd2D((Line1Pt1-Line2Pt1),segmentVec2))<eps<T>)
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Coincident;
+				//Need some more cases to manage. Disjoint and overlap cases
+				return result;
+			} 
+			else
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Parallel;
+				return result;
+			}
+
+		}
+		else
+		{
+			T t = crossProd2D((Line2Pt1 - Line1Pt1), segmentVec2) / crossProd2D(segmentVec1, segmentVec2 );
+			T u = crossProd2D((Line1Pt1 - Line2Pt1), segmentVec1) / crossProd2D(segmentVec2, segmentVec1 );
+			if (u >= T(0) && u <= T(1) && t >= T(0) && t <= T(1))
+			{
+				result.point = Line2Pt1 + (u * segmentVec2);
 				result.type = LineIntersectiontype::Intersecting;
 			}
 			else
