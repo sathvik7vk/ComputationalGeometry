@@ -414,7 +414,8 @@ namespace cg::core
 	{
 		Intersecting,
 		Parallel,
-		Coincident
+		Coincident,
+		NotIntersecting
 	};
 
 	template<typename T>
@@ -447,7 +448,7 @@ namespace cg::core
 			//Lets take a vector from point 1 to point 2. Compute the orientation of any one of the directions with this vector.
 			//If the cross product result is zero, they are coincident lines.
 			//else parallel lines.
-			if(crossProd2D((line2Pt - line1Pt), line1Dir ) < eps<T>)
+			if(abs(crossProd2D((line2Pt - line1Pt), line1Dir ) )< eps<T>)
 			{
 				result.point = {};
 				result.type = LineIntersectiontype::Coincident;
@@ -533,6 +534,52 @@ namespace cg::core
 		}
 		return result;
 
+	}
+
+	template<typename T>
+	IntersectionLinesResult<T> IntersectLineAndSegment(const Line2<T>& line1, const Vec<T,2>& pt1, const Vec<T,2>& pt2 )
+	{
+		IntersectionLinesResult<T> result;
+
+		//Get the data from lines
+		Vec<T,2> line1Pt = line1.point;
+		Vec<T,2> line1Dir = line1.direction;
+
+		Vec<T,2> segmentVec = pt2-pt1;
+
+		//get the cross product between 
+		if(std::abs(crossProd2D(segmentVec, line1Dir))<eps<T>)
+		{
+			if(abs(crossProd2D((line1Pt-pt1),segmentVec))<eps<T>)
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Coincident;
+				return result;
+			} 
+			else
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Parallel;
+				return result;
+			}
+
+		}
+		else
+		{
+			T u = crossProd2D((pt1 - line1Pt ), line1Dir) / crossProd2D(line1Dir, segmentVec);
+			if (u >= T(0) && u <= T(1))
+			{
+				result.point = pt1 + (u * segmentVec);
+				result.type = LineIntersectiontype::Intersecting;
+			}
+			else
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::NotIntersecting;
+			}
+		}
+
+		return result;
 	}
 
 }
