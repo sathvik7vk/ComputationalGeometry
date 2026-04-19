@@ -418,9 +418,120 @@ namespace cg::core
 	};
 
 	template<typename T>
-	void IntersectLines(const Line2<T>& line1, const Line2<T>& line2 )
+	struct IntersectionLinesResult
 	{
-		
+		LineIntersectiontype type;
+		Vec<T,2> point;
+	};
+
+	template<typename T>
+	IntersectionLinesResult<T> IntersectLines(const Line2<T>& line1, const Line2<T>& line2 )
+	{
+		IntersectionLinesResult<T> result;
+
+		//Get the data from lines
+		Vec<T,2> line1Pt = line1.point;
+		Vec<T,2> line1Dir = line1.direction;
+		Vec<T,2> line2Pt = line2.point;
+		Vec<T,2> line2Dir = line2.direction;
+
+		//Take the cross product of directions
+		//if the result is zero, => parallel or coincident
+		//else intersecting.
+
+		T crossRes = crossProd2D(line1Dir, line2Dir);
+
+		if(abs(crossRes) < eps<T>)
+		{
+			//We need the orientation of two lines. 
+			//Lets take a vector from point 1 to point 2. Compute the orientation of any one of the directions with this vector.
+			//If the cross product result is zero, they are coincident lines.
+			//else parallel lines.
+			if(crossProd2D((line2Pt - line1Pt), line1Dir ) < eps<T>)
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Coincident;
+			} 
+			else
+			{
+				result.point = {};
+				result.type = LineIntersectiontype::Parallel;
+			}
+		}
+		else
+		{
+			T t = crossProd2D((line2Pt - line1Pt), line1Dir) / crossRes;
+			// Visit below notes to know how we arrived at above equation.
+			/*
+
+	===============================================================================
+	2D Line–Line Intersection (Derivation Notes)
+	===============================================================================
+
+	Line representation (parametric form):
+		L1(t) = p + t*r
+		L2(u) = q + u*s
+
+	where:
+		p, q : points on the lines
+		r, s : direction vectors
+		t, u : scalar parameters
+
+	At intersection:
+		p + t*r = q + u*s
+
+	Rearrange:
+		t*r = (q - p) + u*s
+
+	This is a vector equation with two unknowns (t, u).
+	To solve for t, eliminate u using the 2D cross product.
+
+	Key properties of 2D cross product:
+		- cross(a, b) = 0  ⇔  a and b are parallel
+		- cross(s, s) = 0
+		- cross is linear
+
+	Take cross product of both sides with s:
+
+		cross(t*r, s) = cross((q - p) + u*s, s)
+
+	Apply linearity:
+
+		t*cross(r, s) = cross(q - p, s) + u*cross(s, s)
+
+	Since:
+		cross(s, s) = 0
+
+	u vanishes, leaving:
+
+		t*cross(r, s) = cross(q - p, s)
+
+	If lines are not parallel:
+		cross(r, s) ≠ 0
+
+	Solve for t:
+
+		t = cross(q - p, s) / cross(r, s)
+
+	Intersection point:
+
+		intersection = p + t*r
+
+	Line classification:
+		- cross(r, s) == 0 and cross(q - p, r) == 0 → Coincident
+		- cross(r, s) == 0 and cross(q - p, r) != 0 → Parallel
+		- cross(r, s) != 0 → Intersecting
+
+	Rule of thumb:
+		- To solve for t (line1 parameter), cross with s
+		- To solve for u (line2 parameter), cross with r
+	===============================================================================
+	*/
+
+			result.point = line1Pt + (t * line1Dir);
+			result.type = LineIntersectiontype::Intersecting;
+		}
+		return result;
 
 	}
 
