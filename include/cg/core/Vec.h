@@ -125,6 +125,21 @@ namespace cg::core
 			for (auto &elem : m_vec)
 				elem = elem * invMagnitude;
 
+				/*
+				1. Division vs. Multiplication (The Performance Win)Floating-point division ($x / y$) is one 
+					of the most computationally expensive arithmetic operations a CPU can perform, often taking anywhere 
+					from 10 to 40 clock cycles depending on the architecture. Multiplication ($x \times y$), on the other hand, 
+					usually takes only 3 to 5 clock cycles.First Method: Performs a division operation $N$ times (once for every 
+					element in the vector).
+					Second Method: Performs exactly one division (T{1} / magnitude) to get the reciprocal,
+				 	and then performs $N$ multiplications.For a 3D vector ($N=3$), it's the difference between 3 divisions versus
+				 	1 division + 3 multiplications. For larger dimensions, the performance savings multiply significantly.
+				  
+				2. Range-Based for Loop vs. Indexed LoopThe second method uses a range-based for loop (for (auto &elem : m_vec)),
+				   which offers several advantages:No Out-of-Bounds Risks: It completely eliminates the risk of off-by-one errors or
+				    indexing bugs because the compiler handles the bounds automatically.
+					*/
+
 			return *this;
 		}
 
